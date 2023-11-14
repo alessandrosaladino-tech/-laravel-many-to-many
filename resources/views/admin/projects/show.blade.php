@@ -37,6 +37,7 @@
                         <p><strong>GitHub Link :</strong> {{$project->github_link}}</p>
                         <p><strong>Public Project Link :</strong> {{$project->public_link}}</p>
                         <p><strong>Release Date :</strong> {{$project->release_date}}</p>
+                        <p><strong>Technology Used :</strong> {{$project->technology}}</p>
 
                     </div>
                 </div>
