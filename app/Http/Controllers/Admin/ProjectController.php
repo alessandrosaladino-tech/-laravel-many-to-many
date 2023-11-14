@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Technology;
 use App\Models\Type;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProjectRequest;
@@ -28,7 +29,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -46,6 +48,7 @@ class ProjectController extends Controller
         }
 
         $newProject = Project::create($valData);
+        $newProject->technologies()->attach($request->technologies);
 
         return to_route('admin.projects.index')->with('status', 'Post created succesfully!');
     }
@@ -67,7 +70,8 @@ class ProjectController extends Controller
             'admin.projects.edit',
             [
                 'project' => $project,
-                'types' => Type::all()
+                'types' => Type::all(),
+                'technologies' => Technology::all()
             ]
         );
     }
@@ -98,6 +102,9 @@ class ProjectController extends Controller
         // dd($valData);
         // AGGIORNA L'ENTITA' CON I VALORI DI $valData
         $project->update($valData);
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($request->technologies);
+        }
         return to_route('admin.projects.show', $project->slug)->with('status', 'Well Done, Element Edited Succeffully');
     }
 
