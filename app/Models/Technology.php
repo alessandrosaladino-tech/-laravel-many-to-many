@@ -11,13 +11,20 @@ class Technology extends Model
 {
     use HasFactory;
 
-    public function projects(): BelongsToMany
+    protected $fillable = ['name', 'slug'];
+
+    public static function generateSlug($name)
     {
-        return $this->belongsToMany(Project::class);
+        return Str::slug($name, '-');
     }
 
-    public static function generateSlug($string)
+    /**
+     * The project that belong to the Technology
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function project(): BelongsToMany
     {
-        return Str::slug($string, '-');
+        return $this->belongsToMany(Project::class);
     }
 }

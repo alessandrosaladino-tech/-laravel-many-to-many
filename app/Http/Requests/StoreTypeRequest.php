@@ -12,7 +12,7 @@ class StoreTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::id() === 1; // SOLOUSER ID 1 PUO' CREARE
+        return Auth::id() === 1; 
     }
 
     /**

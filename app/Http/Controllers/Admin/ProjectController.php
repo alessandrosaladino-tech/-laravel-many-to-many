@@ -139,15 +139,16 @@ class ProjectController extends Controller
 
     public function forceDelete($id)
     {
-        $project = Project::withTrashed()->find($id);
+        $project = Project::onlyTrashed()->find($id);
 
-        //dd($project->thumb);
-        if (!is_null($project->thumb)) {
+        if (!is_Null($project->thumb)) {
             Storage::delete($project->thumb);
         }
 
+        $project->technologies()->detach();
+
         $project->forceDelete();
 
-        return to_route('admin.trash')->with('message', 'Well Done! Project deleted successfully!');
+        return to_route('admin.projects.trash')->with('status', 'Well Done, Element Deleted Succeffully');
     }
 }

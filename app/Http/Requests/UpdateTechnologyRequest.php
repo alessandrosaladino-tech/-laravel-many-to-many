@@ -3,16 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateProjectRequest extends FormRequest
+class UpdateTechnologyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::id() === 1; // SOLO USER ID 1 PPUO' AGGIORNARE
     }
 
     /**
@@ -23,12 +23,8 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type_id' => ['nullable', Rule::exists('types', 'id')],
-            'title' => ['required', 'string', 'min:3', 'max:80', Rule::unique('projects')->ignore($this->project)],
-            'description' => ['nullable', 'string', 'max:300'],
-            'cover_image' =>  ['nullable', 'image', 'max:1024'],
-            'github_link' => ['nullable', 'string', 'max:255', Rule::unique('projects')->ignore($this->project)],
-            'website_link' => ['nullable', 'string', 'max:255', Rule::unique('projects')->ignore($this->project)],
+            // IL NOME E' RICHIESTO, HA UNA LUNGHEZZA 3/50 E DEVE ESSERE UNICO ALL'INTERNO DEL CAMPO name NELLA TABELLA technologies
+            'name' => 'required|bail|min:3|max:50|unique:technologies,name'
         ];
     }
 }

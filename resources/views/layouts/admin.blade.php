@@ -112,8 +112,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.trash' ? 'bg-secondary' : '' }}"
-                                    href="{{ route('admin.trash') }}">
+                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.projects.trash' ? 'bg-secondary' : '' }}"
+                                    href="{{ route('admin.projects.trash') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="pe-2" height="1em"
                                         viewBox="0 0 448 512">
                                         <style>
@@ -126,6 +126,20 @@
                                     </svg>
                                     Trashed
                                 </a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.types.index' ? 'bg-secondary' : '' }}"
+                                    href="{{ route('admin.types.index') }}">
+                                    <i class="fa-solid fa-tag fa-lg fa-fw"></i> {{ __('Project Types') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.technologies.index' ? 'bg-secondary' : '' }}"
+                                    href="{{ route('admin.technologies.index') }}">
+                                    <i class="fa-solid fa-code fa-lg fa-fw"></i> {{ __('Projects Technologies') }}
+                                   
+                                </a>
+
                             </li>
 
                         </ul>
