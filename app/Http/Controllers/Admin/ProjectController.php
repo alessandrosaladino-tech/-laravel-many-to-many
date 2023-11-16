@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Project;
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Technology;
 use App\Models\Type;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateProjectRequest;
-use App\Http\Requests\StoreProjectRequest;
-use App\Models\Project;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use function PHPUnit\Framework\isNull;
+use Illuminate\Support\Str;
+
 
 class ProjectController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       
+
         return view('admin.projects.index', ['projects' => Project::paginate(5)]);
     }
 
@@ -66,14 +66,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view(
-            'admin.projects.edit',
-            [
-                'project' => $project,
-                'types' => Type::all(),
-                'technologies' => Technology::all()
-            ]
-        );
+        $types = Type::all();
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -83,14 +78,17 @@ class ProjectController extends Controller
     {
         $valData = $request->validated();
 
+        // INVOCA IL METODO DENTRO IL MODEL
+        $valData['slug'] = $project->generateSlug($request->title);
+
         if ($request->has('thumb')) {
 
             // SALVA L'IMMAGINE NEL FILESYSTEM
             $newThumb = $request->thumb;
             $path = Storage::put('thumbs', $newThumb);
 
-            // SE IL FUMETTO HA GIA' UNA THUMB NEL DB , DEVE ESSERE ELIMINATA DATO CHE LA STIAMO SOSTITUENDO
-            if (!isNull($project->thumb) && Storage::fileExists($project->thumb)) {
+            // SE IL FUMETTO HA GIA' UNA COVER NEL DB  NEL FILE SYSTEM, DEVE ESSERE ELIMINATA DATO CHE LA STIAMO SOSTITUENDO
+            if (!is_Null($project->thumb) && Storage::fileExists($project->thumb)) {
                 // ELIMINA LA VECCHIA PREVIEW
                 Storage::delete($project->thumb);
             }
@@ -99,16 +97,17 @@ class ProjectController extends Controller
             $valData['thumb'] = $path;
         }
 
-        // dd($valData);
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($request->technologies); 
+        }
+
         // AGGIORNA L'ENTITA' CON I VALORI DI $valData
         $project->update($valData);
-        if ($request->has('technologies')) {
-            $project->technologies()->sync($request->technologies);
-        }
         return to_route('admin.projects.show', $project->slug)->with('status', 'Well Done, Element Edited Succeffully');
     }
 
-       /**
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Project $project)

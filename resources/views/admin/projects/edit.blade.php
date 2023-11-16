@@ -42,18 +42,22 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="type_id" class="form-label">Choose a Type</label>
-                        <select class="form-select form-select @error('type_id') is-invalid @enderror" name="type_id" id="type_id">
-                            <option selected disabled>Select one</option>
-                            <option>Untyped</option>
-            
+                        <label for="type_id" class="form-label"><strong>Type</strong></label>
+                        <select class="form-select form-select @error('type_id') is-invalid @enderror" name="type_id"
+                            aria-describedby="helpType_id" id="type_id">
+                            <option selected disabled>Select a Type</option>
+                            <option value="">Untyped</option>
                             @foreach ($types as $type)
-                                <option value="{{ $type->id }}"
+                                <option value="{{ $type->id }}" 
                                     {{ $type->id == old('type_id', $project->type_id) ? 'selected' : '' }}>
-                                    {{ $type->name }}</option>
+                                    {{ $type->name }}
+                                </option>
                             @endforeach
-            
                         </select>
+
+                        @error('type_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="my-4">

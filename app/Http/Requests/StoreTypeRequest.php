@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class StoreTypeRequest extends FormRequest
 {
@@ -12,7 +12,7 @@ class StoreTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::id() === 1; // SOLOUSER ID 1 PUO' CREARE
     }
 
     /**
@@ -23,7 +23,7 @@ class StoreTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:50', Rule::unique('types')],
+            'name' => 'required|bail|min:3|max:50|unique:types,name'
         ];
     }
 }

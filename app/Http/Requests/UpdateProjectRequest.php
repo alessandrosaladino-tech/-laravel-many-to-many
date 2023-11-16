@@ -26,7 +26,7 @@ class UpdateProjectRequest extends FormRequest
             'title' => ['required', 'string', 'min:3', 'max:80', Rule::unique('projects')->ignore($this->project)],
             'thumb' => ['nullable', 'image', 'max:1024'],
             'description' => ['nullable', 'string', 'max:300'],
-            'type' => ['nullable', 'string', 'max:100'],
+            'type_id' => ['nullable', 'string', 'max:100'],
             'release_date' => ['nullable', 'string', 'max:100'],
             'github_link' => ['nullable', 'string', 'max:255', Rule::unique('projects')->ignore($this->project)],
             'public_link' => ['nullable', 'string', 'max:255', Rule::unique('projects')->ignore($this->project)],
